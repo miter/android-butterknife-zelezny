@@ -3,10 +3,7 @@ package eu.inmite.android.plugin.butterknifezelezny;
 import com.intellij.codeInsight.actions.ReformatAndOptimizeImportsProcessor;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElementFactory;
-import com.intellij.psi.PsiFile;
+import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import eu.inmite.android.plugin.butterknifezelezny.common.Defintions;
 import eu.inmite.android.plugin.butterknifezelezny.model.Element;
@@ -28,6 +25,7 @@ public class InjectWriter extends WriteCommandAction.Simple {
     //
 //    public static final String sViewHolderName = "ButterknifeViewHolder";
     protected String mMethodName;
+    protected boolean hasFindViewMethod = false;
 
     public InjectWriter(PsiFile file, PsiClass clazz, String command, ArrayList<Element> elements, String layoutFileName, String fieldNamePrefix, boolean createHolder, String holderClassName, String methodName) {
         super(clazz.getProject(), command);
@@ -42,6 +40,22 @@ public class InjectWriter extends WriteCommandAction.Simple {
         mCreateHolder = createHolder;
         mHolderClassName = holderClassName;
         mMethodName = methodName;
+        hasFindViewMethod = checkHasFindViewMethod(mClass);
+    }
+
+    /**
+     * 检查该类中是否存在findViewById方法
+     *
+     * @param psiClass
+     */
+    private boolean checkHasFindViewMethod(PsiClass psiClass) {
+        //该类中是否有findViewById方法
+        PsiMethod[] methods = psiClass.findMethodsByName("findViewById", true);
+        if (methods != null && methods.length > 0) {
+            PsiMethod method = methods[0];
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -106,13 +120,27 @@ public class InjectWriter extends WriteCommandAction.Simple {
      * @return
      */
     private StringBuilder createMethod(String methodName) {
+        return createMethod(methodName,true,"android.view.View root");
+    }
+
+    private StringBuilder createMethod(String methodName,boolean hasParams, String... args) {
         //创建一个方法
         StringBuilder method = new StringBuilder();
         method.append("private void ");
         method.append(methodName);
-        method.append("(android.view.View root)");
+        method.append("(");
+        if (args != null) {
+            for (int i = 0; i < args.length; i++) {
+                String arg = args[i];
+                method.append(arg);
+                if (i != args.length - 1) {
+                    method.append(",");
+                }
+            }
+        }
+        method.append(")");
         method.append("{");
-        method.append(createInitViews());
+        method.append(createInitViews(hasParams));
         method.append("}");
         return method;
     }
@@ -122,7 +150,7 @@ public class InjectWriter extends WriteCommandAction.Simple {
      *
      * @return
      */
-    private StringBuilder createInitViews() {
+    private StringBuilder createInitViews(boolean hasParams) {
         StringBuilder s = new StringBuilder();
         for (Element element : mElements) {
             s.append(element.fieldName);
@@ -135,7 +163,12 @@ public class InjectWriter extends WriteCommandAction.Simple {
                 s.append("android.widget.");
                 s.append(element.name);
             }
-            s.append(")root.findViewById(");
+            s.append(")");
+            if (hasParams) {
+                s.append("root");
+                s.append(".");
+            }
+            s.append("findViewById(");
             String rPrefix;
             if (element.isAndroidNS) {
                 rPrefix = "android.R.id.";
@@ -184,6 +217,10 @@ public class InjectWriter extends WriteCommandAction.Simple {
         for (StringBuilder field : fields) {
             mClass.add(mFactory.createFieldFromText(field.toString(), mClass));
         }
-        mClass.add(mFactory.createMethodFromText(createMethod(mMethodName).toString(), mClass));
+        if (checkHasFindViewMethod(mClass)) {
+            mClass.add(mFactory.createMethodFromText(createMethod(mMethodName,false, null).toString(), mClass));
+        } else {
+            mClass.add(mFactory.createMethodFromText(createMethod(mMethodName).toString(), mClass));
+        }
     }
 }
