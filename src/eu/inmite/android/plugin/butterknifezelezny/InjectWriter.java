@@ -49,10 +49,10 @@ public class InjectWriter extends WriteCommandAction.Simple {
      * @param psiClass
      */
     private boolean checkHasFindViewMethod(PsiClass psiClass) {
-        //该类中是否有findViewById方法
         PsiMethod[] methods = psiClass.findMethodsByName("findViewById", true);
         if (methods != null && methods.length > 0) {
             PsiMethod method = methods[0];
+            //TODO:需要检查返回类型
             return true;
         }
         return false;
@@ -75,7 +75,6 @@ public class InjectWriter extends WriteCommandAction.Simple {
 
     /**
      * Create ViewHolder for adapters with injections
-     * 为adapter创建ViewHolder和注解
      */
     protected void generateAdapter() {
         // view holder class
@@ -86,7 +85,6 @@ public class InjectWriter extends WriteCommandAction.Simple {
         holderBuilder.append("(view);");
         holderBuilder.append("}");
 
-        //创建一个类
         PsiClass viewHolder = mFactory.createClassFromText(holderBuilder.toString(), mClass);
         viewHolder.setName(mHolderClassName);
 
@@ -96,20 +94,6 @@ public class InjectWriter extends WriteCommandAction.Simple {
         }
         viewHolder.add(mFactory.createMethodFromText(createMethod(mMethodName).toString(), viewHolder));
         mClass.add(viewHolder);
-        // add view holder's comment
-        //类说明
-        StringBuilder comment = new StringBuilder();
-
-        comment.append("/**\n");
-        comment.append(" * This class contains all butterknife-injected Views & Layouts from layout file '");
-        comment.append(mLayoutFileName);
-        comment.append("'\n");
-        comment.append("* for easy to all layout elements.\n");
-        comment.append(" *\n");
-        comment.append(" * @author\tAndroid Butter Zelezny, plugin for IntelliJ IDEA/Android Studio by Inmite (www.inmite.eu)\n");
-        comment.append("*/");
-
-        mClass.addBefore(mFactory.createCommentFromText(comment.toString(), mClass), mClass.findInnerClassByName(mHolderClassName, true));
         mClass.addBefore(mFactory.createKeyword("static", mClass), mClass.findInnerClassByName(mHolderClassName, true));
     }
 
@@ -120,10 +104,15 @@ public class InjectWriter extends WriteCommandAction.Simple {
      * @return
      */
     private StringBuilder createMethod(String methodName) {
-        return createMethod(methodName,true,"android.view.View root");
+        return createMethod(methodName, "android.view.View root");
     }
 
-    private StringBuilder createMethod(String methodName,boolean hasParams, String... args) {
+    /**
+     * @param methodName 方法名
+     * @param args       参数
+     * @return
+     */
+    private StringBuilder createMethod(String methodName, String... args) {
         //创建一个方法
         StringBuilder method = new StringBuilder();
         method.append("private void ");
@@ -140,7 +129,7 @@ public class InjectWriter extends WriteCommandAction.Simple {
         }
         method.append(")");
         method.append("{");
-        method.append(createInitViews(hasParams));
+        method.append(createInitViews(args != null));
         method.append("}");
         return method;
     }
@@ -218,7 +207,7 @@ public class InjectWriter extends WriteCommandAction.Simple {
             mClass.add(mFactory.createFieldFromText(field.toString(), mClass));
         }
         if (checkHasFindViewMethod(mClass)) {
-            mClass.add(mFactory.createMethodFromText(createMethod(mMethodName,false, null).toString(), mClass));
+            mClass.add(mFactory.createMethodFromText(createMethod(mMethodName, null).toString(), mClass));
         } else {
             mClass.add(mFactory.createMethodFromText(createMethod(mMethodName).toString(), mClass));
         }

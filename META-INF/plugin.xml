@@ -1,16 +1,21 @@
 <idea-plugin version="2">
-	<id>eu.inmite.android.plugin.butterknifezelezny</id>
-	<name>Android ButterKnife Zelezny</name>
-	<version>1.0.1</version>
-	<vendor email="carnero@inmite.eu" url="http://inmite.eu/">inmite</vendor>
+    <id>eu.inmite.android.plugin.butterknifezelezny.mter</id>
+    <name>初始化Views</name>
+    <version>1.0.1</version>
+    <vendor email="carnero@inmite.eu" url="http://inmite.eu/">inmite</vendor>
 
-	<description><![CDATA[
-      Simple plugin for generating Butterknife injections from selected layout XML.
+    <description><![CDATA[
+      根据Layout文件初始化View,源码修改自https://github.com/inmite/android-butterknife-zelezny
+      用法:在R.layout.xxx代码上上按下alt+insert键,选择 初始化Views
       ]]></description>
 
-	<change-notes><![CDATA[
+    <change-notes><![CDATA[
 <html>
-
+  <b>1.0.1</b> (1/6/2014)
+  <ul>
+    <li>remove injections...
+    <li>增加自定义方法名称/自定义ViewHolder名称
+  </ul>
   <b>1.0.1</b> (1/6/2014)
   <ul>
     <li>Fix for Java 6
@@ -23,26 +28,25 @@
 </html>
       ]]></change-notes>
 
-	<idea-version since-build="123.72"/>
+    <idea-version since-build="123.72"/>
 
-	<!-- please see http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
+    <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
                    on how to target different products -->
-	<depends>com.intellij.modules.lang</depends>
 
-	<actions>
-		<action id="AddInjectionsAction"
-			class="eu.inmite.android.plugin.butterknifezelezny.InjectAction"
-			text="根据layout文件初始化View"
-			icon="/eu/inmite/android/plugin/butterknifezelezny/icons/butterknife-zelezny.png"
-			description="Inserts Butterknife injections into currently opened source">
+    <actions>
+        <action id="InitViews"
+                class="eu.inmite.android.plugin.butterknifezelezny.InjectAction"
+                text="初始化Views"
+                icon="/eu/inmite/android/plugin/butterknifezelezny/icons/butterknife-zelezny.png"
+                description="根据layout.xml初始化View">
 
-			<keyboard-shortcut
-				keymap="$default"
-				first-keystroke="shift control B"/>
-			<add-to-group group-id="GenerateGroup"/>
-			<!-- <add-to-group group-id="ProjectViewPopupMenu" /> file pop-up -->
-		</action>
-	</actions>
+            <keyboard-shortcut
+                    keymap="$default"
+                    first-keystroke="shift control B"/>
+            <add-to-group group-id="GenerateGroup"/>
+            <!-- <add-to-group group-id="ProjectViewPopupMenu" /> file pop-up -->
+        </action>
+    </actions>
 
-	<extensions defaultExtensionNs="com.intellij"/>
+    <extensions defaultExtensionNs="com.intellij"/>
 </idea-plugin>
