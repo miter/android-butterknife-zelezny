@@ -44,7 +44,7 @@ public class InjectWriter extends WriteCommandAction.Simple {
     }
 
     /**
-     * æ£€æŸ¥è¯¥ç±»ä¸­æ˜¯å¦å­˜åœ¨findViewByIdæ–¹æ³•
+     * ¼ì²é¸ÃÀàÖĞÊÇ·ñ´æÔÚfindViewById·½·¨
      *
      * @param psiClass
      */
@@ -52,7 +52,7 @@ public class InjectWriter extends WriteCommandAction.Simple {
         PsiMethod[] methods = psiClass.findMethodsByName("findViewById", true);
         if (methods != null && methods.length > 0) {
             PsiMethod method = methods[0];
-            //TODO:éœ€è¦æ£€æŸ¥è¿”å›ç±»å‹
+            //TODO:ĞèÒª¼ì²é·µ»ØÀàĞÍ
             return true;
         }
         return false;
@@ -98,9 +98,9 @@ public class InjectWriter extends WriteCommandAction.Simple {
     }
 
     /**
-     * åˆ›å»ºä¸€ä¸ªåˆå§‹åŒ–Viewçš„æ–¹æ³•
+     * ´´½¨Ò»¸ö³õÊ¼»¯ViewµÄ·½·¨
      *
-     * @param methodName æ–¹æ³•å
+     * @param methodName ·½·¨Ãû
      * @return
      */
     private StringBuilder createMethod(String methodName) {
@@ -108,12 +108,12 @@ public class InjectWriter extends WriteCommandAction.Simple {
     }
 
     /**
-     * @param methodName æ–¹æ³•å
-     * @param args       å‚æ•°
+     * @param methodName ·½·¨Ãû
+     * @param args       ²ÎÊı
      * @return
      */
     private StringBuilder createMethod(String methodName, String... args) {
-        //åˆ›å»ºä¸€ä¸ªæ–¹æ³•
+        //´´½¨Ò»¸ö·½·¨
         StringBuilder method = new StringBuilder();
         method.append("private void ");
         method.append(methodName);
@@ -135,7 +135,7 @@ public class InjectWriter extends WriteCommandAction.Simple {
     }
 
     /**
-     * ç”ŸæˆViewåˆå§‹åŒ–å†…å®¹
+     * Éú³ÉView³õÊ¼»¯ÄÚÈİ
      *
      * @return
      */
@@ -173,7 +173,7 @@ public class InjectWriter extends WriteCommandAction.Simple {
     }
 
     /**
-     * ç”Ÿæˆå­—æ®µ
+     * Éú³É×Ö¶Î
      *
      * @return
      */

@@ -1,12 +1,12 @@
 <idea-plugin version="2">
     <id>eu.inmite.android.plugin.butterknifezelezny.mter</id>
-    <name>åˆå§‹åŒ–Views</name>
+    <name>³õÊ¼»¯Views</name>
     <version>1.0.1</version>
     <vendor email="carnero@inmite.eu" url="http://inmite.eu/">inmite</vendor>
 
     <description><![CDATA[
-      æ ¹æ®Layoutæ–‡ä»¶åˆå§‹åŒ–View,æºç ä¿®æ”¹è‡ªhttps://github.com/inmite/android-butterknife-zelezny
-      ç”¨æ³•:åœ¨R.layout.xxxä»£ç ä¸Šä¸ŠæŒ‰ä¸‹alt+inserté”®,é€‰æ‹© åˆå§‹åŒ–Views
+      ¸ù¾İLayoutÎÄ¼ş³õÊ¼»¯View,Ô´ÂëĞŞ¸Ä×Ôhttps://github.com/inmite/android-butterknife-zelezny
+      ÓÃ·¨:ÔÚR.layout.xxx´úÂëÉÏÉÏ°´ÏÂalt+insert¼ü,Ñ¡Ôñ ³õÊ¼»¯Views
       ]]></description>
 
     <change-notes><![CDATA[
@@ -14,7 +14,7 @@
   <b>1.0.1</b> (1/6/2014)
   <ul>
     <li>remove injections...
-    <li>å¢åŠ è‡ªå®šä¹‰æ–¹æ³•åç§°/è‡ªå®šä¹‰ViewHolderåç§°
+    <li>Ôö¼Ó×Ô¶¨Òå·½·¨Ãû³Æ/×Ô¶¨ÒåViewHolderÃû³Æ
   </ul>
   <b>1.0.1</b> (1/6/2014)
   <ul>
@@ -36,9 +36,9 @@
     <actions>
         <action id="InitViews"
                 class="eu.inmite.android.plugin.butterknifezelezny.InjectAction"
-                text="åˆå§‹åŒ–Views"
+                text="³õÊ¼»¯Views"
                 icon="/eu/inmite/android/plugin/butterknifezelezny/icons/butterknife-zelezny.png"
-                description="æ ¹æ®layout.xmlåˆå§‹åŒ–View">
+                description="¸ù¾İlayout.xml³õÊ¼»¯View">
 
             <keyboard-shortcut
                     keymap="$default"

@@ -59,10 +59,10 @@ public class InjectAction extends BaseGenerateAction implements IConfirmListener
 			Utils.showErrorNotification(project, "No layout found");
 			return; // no layout found
 		}
-        //åœ¨layoutæ–‡ä»¶ä¸­æŸ¥æ‰¾id
+        //ÔÚlayoutÎÄ¼şÖĞ²éÕÒid
 		ArrayList<Element> elements = Utils.getIDsFromLayout(layout);
 		if (!elements.isEmpty()) {
-            //å­˜åœ¨idåˆ™æ˜¾ç¤ºdialog
+            //´æÔÚidÔòÏÔÊ¾dialog
 			showDialog(project, editor, elements);
 		} else {
 			Utils.showErrorNotification(project, "No IDs found in layout");
@@ -70,7 +70,7 @@ public class InjectAction extends BaseGenerateAction implements IConfirmListener
 	}
 
 	public void onConfirm(Project project, Editor editor, ArrayList<Element> elements, String fieldNamePrefix, boolean createHolder,String holderClassName,String methodName) {
-        //Dialogç‚¹å‡»ç¡®å®šçš„æ—¶å€™è°ƒç”¨,å³ç”Ÿæˆä»£ç 
+        //Dialogµã»÷È·¶¨µÄÊ±ºòµ÷ÓÃ,¼´Éú³É´úÂë
 		PsiFile file = PsiUtilBase.getPsiFileInEditor(editor, project);
 		PsiFile layout = Utils.getLayoutFileFromCaret(editor, file);
 
@@ -85,7 +85,7 @@ public class InjectAction extends BaseGenerateAction implements IConfirmListener
 		}
 
 		if (cnt > 0) { // generate injections
-            //ç”Ÿæˆæ³¨è§£
+            //Éú³É×¢½â
 			new InjectWriter(file, getTargetClass(editor, file), "Generate Injections", elements, fieldNamePrefix, layout.getName(), createHolder,holderClassName,methodName).execute();
 
 			if (cnt == 1) {
@@ -107,7 +107,7 @@ public class InjectAction extends BaseGenerateAction implements IConfirmListener
 		PsiClass clazz = getTargetClass(editor, file);
 
 		// get parent classes and check if it's an adapter
-        //è·å–çˆ¶ç±»classå¹¶æ£€æµ‹æ˜¯ä¸æ˜¯adapter
+        //»ñÈ¡¸¸Ààclass²¢¼ì²âÊÇ²»ÊÇadapter
 		boolean createHolder = false;
 		PsiReferenceList list = getTargetClass(editor, file).getExtendsList();
 		for (PsiJavaCodeReferenceElement element : list.getReferenceElements()) {
@@ -117,7 +117,7 @@ public class InjectAction extends BaseGenerateAction implements IConfirmListener
 		}
 
 		// get already generated injections
-        //è·å–å·²ç»ç”Ÿæˆçš„æ³¨è§£
+        //»ñÈ¡ÒÑ¾­Éú³ÉµÄ×¢½â
 		ArrayList<String> ids = new ArrayList<String>();
 		PsiField[] fields = clazz.getAllFields();
 		String[] annotations;
