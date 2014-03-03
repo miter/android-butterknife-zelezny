@@ -44,7 +44,7 @@ public class InjectWriter extends WriteCommandAction.Simple {
     }
 
     /**
-     * ¼ì²é¸ÃÀàÖĞÊÇ·ñ´æÔÚfindViewById·½·¨
+     * æ£€æŸ¥è¯¥ç±»ä¸­æ˜¯å¦å­˜åœ¨findViewByIdæ–¹æ³•
      *
      * @param psiClass
      */
@@ -52,7 +52,7 @@ public class InjectWriter extends WriteCommandAction.Simple {
         PsiMethod[] methods = psiClass.findMethodsByName("findViewById", true);
         if (methods != null && methods.length > 0) {
             PsiMethod method = methods[0];
-            //TODO:ĞèÒª¼ì²é·µ»ØÀàĞÍ
+            //TODO:éœ€è¦æ£€æŸ¥è¿”å›ç±»å‹
             return true;
         }
         return false;
@@ -98,9 +98,9 @@ public class InjectWriter extends WriteCommandAction.Simple {
     }
 
     /**
-     * ´´½¨Ò»¸ö³õÊ¼»¯ViewµÄ·½·¨
+     * åˆ›å»ºä¸€ä¸ªåˆå§‹åŒ–Viewçš„æ–¹æ³•
      *
-     * @param methodName ·½·¨Ãû
+     * @param methodName æ–¹æ³•å
      * @return
      */
     private StringBuilder createMethod(String methodName) {
@@ -108,12 +108,12 @@ public class InjectWriter extends WriteCommandAction.Simple {
     }
 
     /**
-     * @param methodName ·½·¨Ãû
-     * @param args       ²ÎÊı
+     * @param methodName æ–¹æ³•å
+     * @param args       å‚æ•°
      * @return
      */
     private StringBuilder createMethod(String methodName, String... args) {
-        //´´½¨Ò»¸ö·½·¨
+        //åˆ›å»ºä¸€ä¸ªæ–¹æ³•
         StringBuilder method = new StringBuilder();
         method.append("private void ");
         method.append(methodName);
@@ -135,13 +135,16 @@ public class InjectWriter extends WriteCommandAction.Simple {
     }
 
     /**
-     * Éú³ÉView³õÊ¼»¯ÄÚÈİ
+     * ç”ŸæˆViewåˆå§‹åŒ–å†…å®¹
      *
      * @return
      */
     private StringBuilder createInitViews(boolean hasParams) {
         StringBuilder s = new StringBuilder();
         for (Element element : mElements) {
+            //ä¸ä½¿ç”¨
+            if (!element.used) continue;
+
             s.append(element.fieldName);
             s.append("=(");
             if (element.nameFull != null && element.nameFull.length() > 0) { // custom package+class
@@ -173,13 +176,15 @@ public class InjectWriter extends WriteCommandAction.Simple {
     }
 
     /**
-     * Éú³É×Ö¶Î
+     * ç”Ÿæˆå­—æ®µ
      *
      * @return
      */
     private List<StringBuilder> createViewFields() {
         ArrayList<StringBuilder> fields = new ArrayList<StringBuilder>();
         for (Element element : mElements) {
+            //ä¸é€‚ç”¨
+            if (!element.used) continue;
             StringBuilder field = new StringBuilder();
             field.append("private ");
             if (element.nameFull != null && element.nameFull.length() > 0) { // custom package+class
